@@ -1,0 +1,54 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+/* .location-input-header{
+  font-size: large;
+} */
+.card-container{
+   margin-top: 5%;
+  display:flex;
+  gap: 20px;
+}
+.card{
+  background-color:darkcyan;
+  opacity: 0.8;
+  border-radius: 10px;
+}
+.card-header{
+  padding: 20px;
+  font-size: x-large;
+}
+.card-text{
+  padding-bottom: 20px;
+  font-size:larger
+}
+.filter-container{
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap:5%;
+}
+.list-container{
+  width:100vh;
+  padding-top: 10px;
+}
+.list-date{
+  float:left;
+  padding-left: 10%;
+
+}
+.list-mintemp{
+  display: inline-block;
+  margin-left: 20%;
+}
+.list-maxtemp{
+  display: inline-block;
+  margin-left: 5%;
+}
+.list-precip{
+  float:right;
+  padding-right: 10%;
+}
