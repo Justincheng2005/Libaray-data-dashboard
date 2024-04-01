@@ -1,15 +1,19 @@
-function Card({catName, catData}){
+function Card({catName, catMainData, catSubData}){
     return(
     <div>
-        {catData ? (
+        {catMainData ? (
             <div className="card">
                 <div className="card-header">{catName}</div>
-                <div className="card-text">{catData}</div>
+                <div className="card-text">{catMainData}</div>
+                {catSubData ? 
+                    <div className="card-subtext">{catSubData}</div> :
+                    null
+                }
             </div>
         ) :
             <div className="card">
                 <div className="card-header">{catName}</div>
-                <div className="card-text">No City Selected</div>
+                <div className="card-text">None Found</div>
             </div>
         }
     </div>

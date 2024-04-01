@@ -8,22 +8,30 @@
   font-size: large;
 } */
 .card-container{
-   margin-top: 5%;
+  margin-top: 5%;
   display:flex;
+  align-items: center;
+  justify-content: center;
   gap: 20px;
 }
 .card{
+  height:inherit;
   background-color:darkcyan;
   opacity: 0.8;
   border-radius: 10px;
 }
 .card-header{
-  padding: 20px;
+  padding: 10px 20px;
   font-size: x-large;
 }
 .card-text{
+  padding-bottom: 5px;
+  font-size:larger;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.card-subtext{
   padding-bottom: 20px;
-  font-size:larger
 }
 .filter-container{
   padding-top: 20px;
@@ -32,23 +40,23 @@
   gap:5%;
 }
 .list-container{
-  width:100vh;
-  padding-top: 10px;
-}
-.list-date{
+  padding-top: 20px;
   float:left;
-  padding-left: 10%;
-
 }
-.list-mintemp{
-  display: inline-block;
-  margin-left: 20%;
+table{
+  width: 100%;
+  border-collapse: collapse;
 }
-.list-maxtemp{
-  display: inline-block;
-  margin-left: 5%;
+.table-title{
+  width:50%;
 }
-.list-precip{
-  float:right;
-  padding-right: 10%;
+thead{
+  border:solid;
+  border-width:0px 0px 3px 0px;
+  border-color: white;
+}
+td{
+  border:solid;
+  border-width:0px 0px 1px 0px;
+  border-color: white;
 }

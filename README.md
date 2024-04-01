@@ -2,20 +2,23 @@
 
 Submitted by: **Justin Cheng**
 
-This web app: **insert description**
+This web app: **Displays book pulled from and open library API. It allows users to search for books by title and by author**
 
-Time spent: **X** hours spent in total
+Time spent: **13** hours spent in total
 
 ## Required Features
 
 The following **required** functionality is completed:
 
-- [ ] **The list displays a list of data fetched using an API call**
+- [x] **The list displays a list of data fetched using an API call**
 - [x] **Data uses the useEffect React hook and async/await syntax**
-- [ ] **The app dashboard includes at least three summary statistics about the data such as**
-  - [ ] *insert details*
-- [ ] **A search bar allows the user to search for an item in the fetched data**
-- [ ] **Multiple different filters (2+) allow the user to filter items in the database by specified categories**
+- [x] **The app dashboard includes at least three summary statistics about the data such as**
+  - [x] Number of Books
+  - [x]Highest Rated Book
+  - [x] Most read Book
+ 
+- [x] **A search bar allows the user to search for an item in the fetched data**
+- [x] **Multiple different filters (2+) allow the user to filter items in the database by specified categories**
 
 The following **optional** features are implemented:
 
@@ -31,7 +34,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://i.imgur.com/oe6TsZv.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/ZvAlo20.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 <!-- Replace this with whatever GIF tool you used! -->
 GIF created with Kap  
@@ -42,7 +45,7 @@ GIF created with Kap
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+It was hard to figure out how to work with the API since the size of the data was so large. I also had a hard time with getting the states to update properly.
 
 ## License
 
