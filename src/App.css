@@ -42,6 +42,7 @@
 .list-container{
   padding-top: 20px;
   float:left;
+  width:100%;
 }
 table{
   width: 100%;
@@ -59,4 +60,33 @@ td{
   border:solid;
   border-width:0px 0px 1px 0px;
   border-color: white;
+}
+.page-container{
+  padding-top: 20px;
+  width: 100%;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.other-page-button{
+  background-color: darkcyan;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+.other-page-button:hover{
+  background-color: white;
+  color: darkcyan;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+.current-page-button{
+  background-color: darkcyan;
+  color: white;
+  border-width: 2px;
+  border-color:black;
+  border-radius: 5px;
+  padding: 5px 10px;
 }

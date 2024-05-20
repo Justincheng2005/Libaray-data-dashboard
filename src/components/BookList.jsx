@@ -16,7 +16,12 @@ function BookList({dataList}){
                     <tr key={index}>
                         <td className="table-title">{book.title}</td>
                         <td>{book.author_name[0]}</td>
-                        <td>{book.ratings_average}</td>
+                        {book.ratings_average=="NaN" ? 
+                            <td>"-" </td>
+                            :
+                            <td>{Math.round(book.ratings_average * 100) / 100}</td>
+                        }
+                        
                         <td>{book.readinglog_count}</td>
                     </tr>
                 ))}

@@ -6,33 +6,45 @@ import './App.css'
 function App() {
   const [list, setList] = useState([]);
   const [totalItems, setTotalItems] = useState(null);
-  const[ highestRatedBook, setHighestRatedBook] = useState(null);
-  const[ mostReadBook, setMostReadBook] = useState(null);
-  const [filteredList, setFilteredList] = useState([]);
+  const [highestRatedBook, setHighestRatedBook] = useState(null);
+  const [mostReadBook, setMostReadBook] = useState(null);
   const [titleInput, setTitleInput] = useState("*");
   const [authorInput, setAuthorInput] = useState("*");
+  const [pageNumber, setPageNumber] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async() => {
-      const response = await fetch(`https://openlibrary.org/search.json?title=${titleInput}&author=${authorInput}&sort=rating&limit=500`);
+      setLoading(true);
+      const response = await fetch(`https://openlibrary.org/search.json?title=${titleInput}&author=${authorInput}&sort=readinglog&limit=20&page=${pageNumber}`);
       const catalog = await response.json();
+      console.log(catalog);
       console.log(titleInput + " and " + authorInput)
       setTotalItems(catalog.numFound)
       setList(catalog.docs);
-      setHighestRatedBook(catalog.docs[0]);
-      findMostReadBook(catalog.docs);
+      findHighestRating();
+      findMostReadBook();
     }
-    fetchData().catch(console.error);
-  },[list,totalItems,highestRatedBook,mostReadBook,titleInput,authorInput,filteredList]);
-
-  const findMostReadBook = (catalog) => {
-    let mostRead = catalog[0];
-    catalog.forEach((book) => {
-      if(book.readinglog_count > mostRead.readinglog_count){
-        mostRead = book;
-      }
+    fetchData().catch((error) => {
+      setList([]);
+      setLoading(false);
+      console.log(error);
     });
+  },[titleInput,authorInput,pageNumber]);
+
+  const findHighestRating = async() => {
+    const response = await fetch(`https://openlibrary.org/search.json?title=${titleInput}&author=${authorInput}&sort=rating&limit=1`);
+    const catalog = await response.json();
+    let highestRated = catalog.docs[0];
+    setHighestRatedBook(highestRated);
+    setLoading(false);
+  }
+  const findMostReadBook = async() => {
+    const response = await fetch(`https://openlibrary.org/search.json?title=${titleInput}&author=${authorInput}&sort=already_read&limit=1`);
+    const catalog = await response.json();
+    let mostRead = catalog.docs[0];
     setMostReadBook(mostRead);
+    setLoading(false);
   }
 
   const searchTitle = (searchValue) => {
@@ -40,33 +52,6 @@ function App() {
       searchValue="*"
     }
     setTitleInput(searchValue);
-    if(searchValue!="*"){
-      var filteredBooks = list.filter((item) => {
-        return item.title.includes(searchValue) == true
-      })
-      if(authorInput != "*"){
-        filteredBooks = filteredBooks.filter((item) => {
-          return item.author_name[0].toLowerCase().includes(authorInput.toLowerCase()) == true
-        })  
-      }
-      setFilteredList(filteredBooks);
-      findMostReadBook(filteredBooks)
-      setHighestRatedBook(filteredBooks[0])
-      setTotalItems(filteredBooks.length)
-    } else {
-        if(authorInput == "*"){
-          setFilteredList(list);
-        }
-        else{
-          const filteredBooks = list.filter((item) => {
-            return item.author_name[0].toLowerCase().includes(authorInput.toLowerCase())  == true
-        })
-        setFilteredList(filteredBooks);
-        findMostReadBook(filteredBooks)
-        setHighestRatedBook(filteredBooks[0])
-        setTotalItems(filteredBooks.length)
-      }
-    }
   }
   
   const searchAuthor = searchValue => {
@@ -74,38 +59,13 @@ function App() {
       searchValue="*"
     }
     setAuthorInput(searchValue);
-    if(searchValue!="*"){
-      var filteredBooks = list.filter((item) => {
-        return item.author_name[0].toLowerCase().includes(searchValue.toLowerCase()) == true
-      })
-      if(authorInput != "*"){
-        filteredBooks = filteredBooks.filter((item) => {
-          return item.title.includes(titleInput) == true
-      })  
-      }
-      setFilteredList(filteredBooks);
-      findMostReadBook(filteredBooks)
-      setHighestRatedBook(filteredBooks[0])
-      setTotalItems(filteredBooks.length)
-    } else {
-        if(authorInput == "*"){
-          setFilteredList(list);
-        }
-        else{
-          const filteredBooks = list.filter((item) => {
-            return item.title.includes(titleInput)  
-        })
-        setFilteredList(filteredBooks);
-        findMostReadBook(filteredBooks)
-        setHighestRatedBook(filteredBooks[0])
-        setTotalItems(filteredBooks.length)
-      }
-    }
   }
+  
 
   return (
-    <div>
+    <div className='full-page'>
       <h1>Library Dashboard</h1>
+      <div className='search-container'>
         <input 
           type="text"
           placeholder="Search by Title"
@@ -118,53 +78,75 @@ function App() {
           name='author'
           onChange={(inputString) => searchAuthor(inputString.target.value)}
         />
-      <div className='card-container'> 
-        {totalItems ? 
-          <Card 
-            catName="Number of Results"
-            catMainData={totalItems}
-          />
-          : 
-          <Card 
-            catName="Number of Results"
-            catMainData={0}
-          />
-        }
-        {highestRatedBook ? 
-          <Card 
-            catName="Highest Rated Book"
-            catMainData={highestRatedBook.title+ " by " + highestRatedBook.author_name[0]}
-            catSubData={highestRatedBook.ratings_average}
-          />
-          : 
-          <Card 
-            catName="Highest Rating Book"
-          />
-        }
-        {mostReadBook ? 
-          <Card 
-            catName="Most Read Book"
-            catMainData={mostReadBook.title+ " by " + mostReadBook.author_name[0]}
-            catSubData={mostReadBook.readinglog_count + " readers"}
-          />
-          : 
-          <Card 
-            catName="Most Read Book"
-          />
-        }
-      </div>
-      <div className='list-container'>
-        {console.log(filteredList)}
-        {titleInput != "*" || authorInput != "*"? 
-          <BookList
-            dataList={filteredList}
-          />
-          : 
-          <BookList
+        </div>
+      {loading ?
+          <div className='loading'>Loading...</div>
+          :
+          list.length == 0 ?
+          <div>No results found</div>
+          :
+          <>
+          <div className='card-container'> 
+            {totalItems ? 
+              <Card 
+                catName="Number of Results"
+                catMainData={totalItems}
+              />
+              : 
+              <Card 
+                catName="Number of Results"
+                catMainData={0}
+              />
+            }
+            {highestRatedBook ? 
+              <Card 
+                catName="Highest Rated Book"
+                catMainData={highestRatedBook.title+ " by " + highestRatedBook.author_name[0]}
+                catSubData={highestRatedBook.ratings_average}
+              />
+              : 
+              <Card 
+                catName="Highest Rating Book"
+              />
+            }
+            {mostReadBook ? 
+              <Card 
+                catName="Most Read Book"
+                catMainData={mostReadBook.title+ " by " + mostReadBook.author_name[0]}
+                catSubData={mostReadBook.readinglog_count + " readers"}
+              />
+              : 
+              <Card 
+                catName="Most Read Book"
+              />
+            }
+          </div>
+          <div className='list-container'>
+            <BookList
               dataList={list}
-          />
-        }
-      </div>
+            />        
+          </div>
+          <div className='page-container'>
+            {pageNumber>1 ? 
+              <>
+                <button className='other-page-button' onClick={() => setPageNumber(1)}>First</button>
+                <button className='other-page-button' onClick={() => setPageNumber(pageNumber-1)}>{pageNumber-1}</button>
+              </>
+              : 
+              null
+            }
+            <button className='current-page-button'>{pageNumber}</button>
+            {pageNumber<Math.ceil(totalItems/20)? 
+              <>
+                <button className='other-page-button' onClick={() => setPageNumber(pageNumber+1)}>{pageNumber+1}</button>
+                <button className='other-page-button' onClick={() => setPageNumber(Math.ceil(totalItems/20))}>Last</button>
+              </>
+              : 
+              null
+            }
+          </div>
+        </>
+    }
     </div>
   )
 }
